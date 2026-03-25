@@ -1,0 +1,45 @@
+=========================================================
+GOOGLE PLAY STORE SUBMISSION GUIDE
+=========================================================
+
+1. APP BUNDLE (.aab) & MAPPING.TXT
+---------------------------------------------------------
+We have updated the GitHub Actions workflow in this project.
+When you run the GitHub Action, it will now automatically generate:
+- app-release-aab (The .aab file required by Play Store)
+- mapping-txt (The mapping.txt file for ProGuard/obfuscation)
+- app-release-apk (For direct testing)
+
+Download these artifacts from your GitHub Actions run.
+
+2. KEYSTORE FILE (.jks) & UPLOAD KEY
+---------------------------------------------------------
+For security reasons, a Keystore (.jks) MUST be generated on your own computer. 
+If we generated it for you online, it would be a massive security risk.
+
+To generate your Keystore locally, you need Java installed. Open your terminal/command prompt and run:
+
+keytool -genkey -v -keystore my-upload-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias
+
+It will ask for a password and your details. Keep the .jks file and passwords VERY SAFE. You will need them to update your app in the future.
+
+3. SIGNING THE APP BUNDLE (.aab)
+---------------------------------------------------------
+Once you have your .jks file and the downloaded .aab file from GitHub Actions, sign it using jarsigner (included with Java):
+
+jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore my-upload-key.jks app-release.aab my-key-alias
+
+The signed .aab file is what you upload to the Google Play Console!
+
+4. FEATURE GRAPHIC & SCREENSHOTS
+---------------------------------------------------------
+Google Play requires specific promotional images that you must design yourself:
+- Feature Graphic: Exactly 1024 x 500 pixels (JPG or 24-bit PNG, no alpha).
+- App Icon: Exactly 512 x 512 pixels.
+- Screenshots: At least 2 screenshots (between 320px and 3840px).
+
+You can easily create these using free tools like Canva (canva.com) or Figma.
+
+5. PRIVACY POLICY
+---------------------------------------------------------
+You must provide a valid Privacy Policy URL in the Google Play Console. Make sure your policy mentions that you are using a WebView to display web content.
